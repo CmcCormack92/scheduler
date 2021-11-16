@@ -4,62 +4,67 @@ var currentDate = function() {
      $(".date").text(today);
 };
 
-//set current date
-currentDate();
-
-setInterval(currentDate, (1000 * 60) * 300);
-
 //change color based off time
 var backgroundColors = function() {
     var hourId = $(".content").each(function() {
+        $(this).removeClass("bg-danger")
+        $(this).removeClass("bg-secondary")
+        $(this).removeClass("bg-success")
 
         if ($(this).prop("id") == moment().format("HH")) {
             $(this).addClass("bg-danger")
-            console.log($(this))
         }   
         else if ($(this).prop("id") < moment().format("HH")){
             $(this).addClass("bg-secondary")
-            console.log($(this))
         }
         else if ($(this).prop("id") > moment().format("HH")){
             $(this).addClass("bg-success")
-            console.log($(this))
         }
+        
     });
 
 };
 
-setInterval(backgroundColors, (1000 * 60) * 5);
-
 //var for saved plans object
 var plans = [];
 
-// save plans
-// var save = function() {
-//     var plan = $(event.target).siblings("textarea").val()
+var save = function() {
+    var text = $(event.target).siblings("textarea").val()
+    var hour = $(event.target).parent().prop("id")
+    
+    var storage = JSON.parse(localStorage.getItem("eachHour"));
 
-//     var storage = JSON.parse(localStorage.getItem("plans"));
+    // if nothing in localStorage, create an object for plans
+    if (storage === null) {
+        storage = []
+    };
 
-//     // if nothing in localStorage, create an object for plans
-//     if (!storage) {
-//         storage = [];
-//     }
+    var hourTask = {
+        text: text,
+        hour: hour
+    }
 
-//     var hourTask = [{
-//         task: plan
-//     }]
+    storage.push(hourTask)
+    localStorage.setItem("eachHour", JSON.stringify(storage))
+    
+    plans.push(storage);
 
-//     storage.push(hourTask)
-//     localStorage.setItem("hour", JSON.stringify(storage))
-//     plans.push(storage)
+};
 
-
-//     console.log(plans)
-// };
-
+// calls save function when save button is clicked
 $(".save").on("click", function() {
     save();
     
 }) 
 
+//checks date every 5 hours to ensure it will show the correct date during work hours
+setInterval(currentDate, (1000 * 60) * 300);
+
+// runs backgroundColor function every 5 minutes to keep hours background updated
+setInterval(backgroundColors, (1000 * 60) * 5);
+
+//set current date
+currentDate();
+
+//get background colors
 backgroundColors()
