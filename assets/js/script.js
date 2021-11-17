@@ -52,16 +52,13 @@ var save = function() {
 };
 
 // calls save function when save button is clicked
-$(".save").on("click", function() {
-    save();
-    
-}) 
+$(".save").on("click", save)
 
 //checks date every 5 hours to ensure it will show the correct date during work hours
 setInterval(currentDate, (1000 * 60) * 300);
 
-// runs backgroundColor function every 5 minutes to keep hours background updated
-setInterval(backgroundColors, (1000 * 60) * 5);
+// runs backgroundColor function every 2 minutes to keep hours background updated
+setInterval(backgroundColors, (1000 * 60) * 2);
 
 //set current date
 currentDate();
